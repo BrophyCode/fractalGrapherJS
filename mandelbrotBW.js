@@ -5,8 +5,8 @@ let cReal = tf.linspace(-2,2, canvas.width);
 let cImag = tf.linspace(2,-2, canvas.height);
 [cReal, cImag] = tf.meshgrid(cReal,cImag);
 
-let zReal = tf.zeros(cReal.shape);
-let zImag = tf.zeros(cImag.shape);
+let zReal = cReal.zerosLike();
+let zImag = cImag.zerosLike();
 let oldzReal = zReal;
 
 for(let i=0;i<50;i++){
@@ -18,8 +18,9 @@ for(let i=0;i<50;i++){
 let c = tf.complex(cReal, cImag);
 let z = tf.complex(zReal,zImag);
 
-let result = tf.where(tf.logicalAnd(tf.logicalAnd(zReal.less(2), zReal.greater(-2)), tf.logicalAnd(zImag.less(2), zImag.greater(-2))),1,0);
+let result = tf.where(zReal.square().add(zImag.square()).less(4),1,0)
 
 
-tf.browser.toPixels(result, canvas)
+tf.browser.toPixels(result, canvas);
+console.log(performance.now());
 console.log(tf.memory());
